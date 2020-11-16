@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 
-import lang.*;
+import lang.Tokenizer;
 
 public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 	@SuppressWarnings("unused")
@@ -83,19 +83,29 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 					startCol = colNo - 1;
 					text.append(ch);
 					state = 4;
+				} else if (ch == '-') {
+					startCol = colNo - 1;
+					text.append(ch);
+					state = 5;
+				} else if (ch == '/') {
+					text.append(ch);
+					state = 6;
 				} else {			// ヘンな文字を読んだ
 					startCol = colNo - 1;
 					text.append(ch);
 					state = 2;
 				}
+				System.out.println("状態は初期状態です");
 				break;
 			case 1:					// EOFを読んだ
 				tk = new CToken(CToken.TK_EOF, lineNo, startCol, "end_of_file");
 				accept = true;
+				System.out.println("状態はEOFです");
 				break;
 			case 2:					// ヘンな文字を読んだ
 				tk = new CToken(CToken.TK_ILL, lineNo, startCol, text.toString());
 				accept = true;
+				System.out.println("状態は不正状態です");
 				break;
 			case 3:					// 数（10進数）の開始
 				ch = readChar();
@@ -107,10 +117,57 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 					tk = new CToken(CToken.TK_NUM, lineNo, startCol, text.toString());
 					accept = true;
 				}
+				System.out.println("状態は数です");
 				break;
 			case 4:					// +を読んだ
 				tk = new CToken(CToken.TK_PLUS, lineNo, startCol, "+");
 				accept = true;
+				System.out.println("状態は加算です");
+				break;
+			case 5:					// -を読んだ
+				tk = new CToken(CToken.TK_MINUS, lineNo, startCol, "-");
+				accept = true;
+				System.out.println("状態は減算です");
+				break;
+			case 6:					// /を読んだ
+				ch = readChar();
+				if(ch == '/') {
+					text.deleteCharAt(0);
+					state = 7;
+				} else if (ch == '*') {
+					text.deleteCharAt(0);
+					state = 8;
+				}else {				// /の後に他の文字が来た場合は不正状態に遷移
+					startCol = colNo - 1;
+					text.append(ch);
+					tk = new CToken(CToken.TK_ILL, lineNo, startCol, text.toString());
+				}
+				System.out.println("コメントアウトするかも状態です");
+				break;
+			case 7:					// 一行コメントアウトの状態
+				ch = readChar();
+				if(ch == '\n' || ch == '\r') {state = 0;}
+				System.out.println("一行コメントアウト状態です");
+				break;
+			case 8:					// 複数行コメントアウトの状態
+				ch = readChar();
+				if(ch == '*') {state = 9;}
+				else if (ch == (char) - 1) {
+					startCol = colNo - 1;
+					text.append(ch);
+					state = 2;
+					}
+				break;
+			case 9:
+				ch = readChar();
+				if(ch == '*') 				{state = 0;}
+				else if (ch == (char) - 1) {
+					startCol = colNo - 1;
+					text.append(ch);
+					state = 2;
+					}
+				else if (ch == '/') 		{state = 0;}
+				else 						{state = 8;}
 				break;
 			}
 		}
