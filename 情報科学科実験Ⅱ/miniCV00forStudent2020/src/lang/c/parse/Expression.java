@@ -10,7 +10,8 @@ import lang.c.CTokenizer;
 import lang.c.CType;
 
 public class Expression extends CParseRule {
-	// expression ::= term { expressionAdd }
+	// expression ::= term { expressionAdd | expressionSub }
+
 	private CParseRule expression;
 
 	public Expression(CParseContext pcx) {
@@ -25,12 +26,36 @@ public class Expression extends CParseRule {
 		term.parse(pcx);
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
-		while (ExpressionAdd.isFirst(tk)) {
+
+		//while (ExpressionAdd.isFirst(tk)) {
+		//	list = new ExpressionAdd(pcx, term);
+		//	list.parse(pcx);
+		//	term = list;
+		//	tk = ct.getCurrentToken(pcx);
+		//}
+
+		boolean roopflag = true;
+
+		do {
+		if(ExpressionAdd.isFirst(tk)) {
+			// expressionAdd
 			list = new ExpressionAdd(pcx, term);
 			list.parse(pcx);
 			term = list;
 			tk = ct.getCurrentToken(pcx);
+
+		}else if(ExpressionSub.isFirst(tk)){
+			// expressionSub
+			list = new ExpressionSub(pcx, term);
+			list.parse(pcx);
+			term = list;
+			tk = ct.getCurrentToken(pcx);
+		}else {
+			roopflag = false;
 		}
+
+		} while(roopflag);
+
 		expression = term;
 	}
 
@@ -107,6 +132,7 @@ class ExpressionAdd extends CParseRule {
 		}
 	}
 }
+
 class ExpressionSub extends CParseRule {
 	// expressionSub ::= '-' term
 	private CToken op;
