@@ -75,103 +75,159 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 				} else if (ch == (char) -1) {	// EOF
 					startCol = colNo - 1;
 					state = 1;
-				} else if (ch >= '0' && ch <= '9') {
+				} else if (ch >= '1' && ch <= '9') {
 					startCol = colNo - 1;
 					text.append(ch);
 					state = 3;
-				} else if (ch == '+') {
+				} else if(ch == '0') {
 					startCol = colNo - 1;
 					text.append(ch);
-					state = 4;
-				} else if (ch == '-') {
+					state = 13;
+				}else if(ch == '+') {
 					startCol = colNo - 1;
 					text.append(ch);
 					state = 5;
-				} else if (ch == '/') {
+				} else if (ch == '-') {
+					startCol = colNo - 1;
 					text.append(ch);
 					state = 6;
+				} else if (ch == '/') {
+					text.append(ch);
+					state = 7;
+				} else if (ch == '&'){
+					startCol = colNo - 1;
+					text.append(ch);
+					state = 12;
 				} else {			// ヘンな文字を読んだ
 					startCol = colNo - 1;
 					text.append(ch);
 					state = 2;
 				}
-				//System.out.println("状態は初期状態です");
 				break;
 			case 1:					// EOFを読んだ
 				tk = new CToken(CToken.TK_EOF, lineNo, startCol, "end_of_file");
 				accept = true;
-				//System.out.println("状態はEOFです");
 				break;
 			case 2:					// ヘンな文字を読んだ
 				tk = new CToken(CToken.TK_ILL, lineNo, startCol, text.toString());
 				accept = true;
-				//System.out.println("状態は不正状態です");
 				break;
 			case 3:					// 数（10進数）の開始
 				ch = readChar();
 				if (Character.isDigit(ch)) {
 					text.append(ch);
 				} else {
-					// 数の終わり
-					backChar(ch);	// 数を表さない文字は戻す（読まなかったことにする）
-					tk = new CToken(CToken.TK_NUM, lineNo, startCol, text.toString());
-					accept = true;
+					backChar(ch);
+					state = 4;
 				}
-				//System.out.println("状態は数です");
 				break;
-			case 4:					// +を読んだ
+			case 4:					//数が終わった状態
+				tk = new CToken(CToken.TK_NUM,lineNo,startCol,text.toString());
+				if(Integer.decode(text.toString()) > 65535) {
+					tk = new CToken(CToken.TK_ILL,lineNo,startCol,text.toString() + " 16bitで表現できません");
+				}
+				accept = true;
+				break;
+			case 5:					// +を読んだ
 				tk = new CToken(CToken.TK_PLUS, lineNo, startCol, "+");
 				accept = true;
-				//System.out.println("状態は加算です");
 				break;
-			case 5:					// -を読んだ
+			case 6:					// -を読んだ
 				tk = new CToken(CToken.TK_MINUS, lineNo, startCol, "-");
 				accept = true;
-				//System.out.println("状態は減算です");
 				break;
-			case 6:					// /を読んだ
+			case 7:					// /を読んだ
 				ch = readChar();
 				if(ch == '/') {
 					text.deleteCharAt(0);
-					state = 7;
+					state = 8;
 				} else if (ch == '*') {
 					text.deleteCharAt(0);
-					state = 8;
+					state = 9;
 				}else {				// /の後に他の文字が来た場合は不正状態に遷移
-					startCol = colNo - 1;
-					text.append(ch);
-					tk = new CToken(CToken.TK_ILL, lineNo, startCol, text.toString());
+					state = 2;
 				}
-				//System.out.println("コメントアウトするかも状態です");
 				break;
-			case 7:					// 一行コメントアウトの状態
+			case 8:					// 一行コメントアウトの状態
 				ch = readChar();
-				if(ch == '\n' || ch == '\r') {state = 0;}
-				//System.out.println("一行コメントアウト状態です");
+				if(ch == '\n' || ch == '\r') {
+					state = 0;
+				} else if(ch == (char) - 1) {
+					state = 11;
+				} else {
+					state = 8;
+				}
 				break;
-			case 8:					// 複数行コメントアウトの状態
+			case 9:					// 複数行コメントアウトの状態
 				ch = readChar();
 				if(ch == '*') {
+					state = 10;
+				} else if(ch == (char) - 1) {
+					state = 11;
+				} else {
 					state = 9;
-					}else if (ch == (char) - 1) {
-					startCol = colNo - 1;
-					text.append(ch);
-					state = 2;
-					}
+				}
 				break;
-			case 9:
+			case 10:
 				ch = readChar();
 				if(ch == '*'){
-					state = 9;
-					}else if (ch == (char) - 1) {
-					startCol = colNo - 1;
-					text.append(ch);
-					state = 2;
-					}else if (ch == '/'){
+					state = 10;
+				} else if(ch == (char) - 1) {
+					state = 11;
+				} else if(ch == '\n' || ch == '\r') {
 					state = 0;
-					}else {
-					state = 8;
-					}
+				} else {
+					state = 9;
+				}
+				break;
+			case 11:
+				tk = new CToken(CToken.TK_ILL,lineNo,startCol,"コメントアウト中にファイルが終了しました");
+				accept = true;
+				break;
+			case 12:
+				tk = new CToken(CToken.TK_AMP,lineNo,startCol,"&");
+				accept = true;
+				break;
+			case 13:			//0を読み込んだ状態
+				ch = readChar();
+				if(ch >= '0' && ch <= '7') {
+					text.append(ch);
+					state = 15;
+				}else if(ch == 'x' || ch == 'X') {
+					text.append(ch);
+					state = 14;
+				}else {
+					backChar(ch);
+					state = 4;
+				}
+				break;
+			case 14:
+				ch = readChar();
+				if((ch>='0'&&ch<='9') || (ch>='a'&&ch<='f') || (ch>='A'&&ch<='F')) {
+					text.append(ch);
+					state = 16;
+				}else {
+//					backChar(ch);
+					state = 2;
+				}
+				break;
+			case 15:
+				ch = readChar();
+				if(ch>='0'&&ch<='7') {
+					text.append(ch);
+					state = 15;
+				}else {
+					state = 4;
+				}
+				break;
+			case 16:
+				ch = readChar();
+				if((ch>='0'&&ch<='9') || (ch>='a'&&ch<='f') || (ch>='A'&&ch<='F')) {
+					text.append(ch);
+					state = 16;
+				}else {
+					state = 4;
+				}
 				break;
 			}
 		}
