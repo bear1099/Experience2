@@ -43,7 +43,6 @@ public class Expression extends CParseRule {
 			list.parse(pcx);
 			term = list;
 			tk = ct.getCurrentToken(pcx);
-
 		}else if(ExpressionSub.isFirst(tk)){
 			// expressionSub
 			list = new ExpressionSub(pcx, term);
@@ -103,8 +102,9 @@ class ExpressionAdd extends CParseRule {
 		// 足し算の型計算規則
 		final int s[][] = {
 		//		T_err			T_int
-			{	CType.T_err,	CType.T_err },	// T_err
-			{	CType.T_err,	CType.T_int },	// T_int
+			{	CType.T_err,	CType.T_err ,	CType.T_err	},// T_err
+			{	CType.T_err,	CType.T_int ,	CType.T_pint},	// T_int
+			{	CType.T_err,	CType.T_pint ,	CType.T_err},
 		};
 		if (left != null && right != null) {
 			left.semanticCheck(pcx);
@@ -161,8 +161,9 @@ class ExpressionSub extends CParseRule {
 		// 引き算の型計算規則
 		final int s[][] = {
 		//		T_err			T_int
-			{	CType.T_err,	CType.T_err },	// T_err
-			{	CType.T_err,	CType.T_int },	// T_int
+			{	CType.T_err,	CType.T_err,	CType.T_err	},	// T_err
+			{	CType.T_err,	CType.T_int,	CType.T_err },	// T_int
+			{	CType.T_err,	CType.T_pint,	CType.T_pint},
 		};
 		if (left != null && right != null) {
 			left.semanticCheck(pcx);
