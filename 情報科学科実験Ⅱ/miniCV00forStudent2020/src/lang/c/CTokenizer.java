@@ -279,7 +279,7 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 				break;
 			case 22:		//アルファベットを読み込んだ状態
 				ch = readChar();
-				if((ch>='a'&&ch<='z')||(ch>='A'&&ch<='Z')||ch=='_') {
+				if((ch>='a'&&ch<='z')||(ch>='A'&&ch<='Z')||ch=='_'||(ch>='0'&&ch<='9')) {
 					text.append(ch);
 					state = 22;
 				}else {
