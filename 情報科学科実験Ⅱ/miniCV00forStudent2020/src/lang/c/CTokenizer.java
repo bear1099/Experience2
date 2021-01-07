@@ -156,7 +156,7 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 				} else if (ch == '*') {
 					text.deleteCharAt(0);
 					state = 9;
-				} else if (Character.isDigit(ch)){
+				} else if (Character.isDigit(ch) || ch == '('){
 					backChar(ch);
 					tk = new CToken(CToken.TK_DIV, lineNo, startCol, "/");
 					accept = true;

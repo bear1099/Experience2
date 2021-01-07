@@ -20,7 +20,7 @@ public class unsignedFactor extends CParseRule {
 		// ここにやってくるときは、必ずisFirst()が満たされている
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
-		if(Factor.isFirst(tk)) {
+		if(FactorAmp.isFirst(tk)) {
 			number = new FactorAmp(pcx);
 			number.parse(pcx);
 		} else if(Number.isFirst(tk)) {
@@ -54,6 +54,6 @@ public class unsignedFactor extends CParseRule {
 		PrintStream o = pcx.getIOContext().getOutStream();
 		o.println(";;; unsignedFactor starts");
 		if (number != null) { number.codeGen(pcx); }
-		o.println(";;; factor completes");
+		o.println(";;; unsignedfactor completes");
 	}
 }

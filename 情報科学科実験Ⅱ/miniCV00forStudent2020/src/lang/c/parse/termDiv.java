@@ -62,7 +62,7 @@ public class termDiv extends CParseRule {
 			right.codeGen(pcx);
 			o.println("\tJSR\tDIV\t ; termDiv:サブルーチンを呼び出す");
 			o.println("\tSUB\t#2, R6 ; termDiv:積んだ引数を捨てる");
-			o.println("\tMOV\tR0, (R6)+; termDiv:乗算の結果をスタックに積む");
+			o.println("\tMOV\tR0, (R6)+; termDiv:除算の結果をスタックに積む");
 		}
 	}
 }
