@@ -98,6 +98,18 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 					startCol = colNo - 1;
 					text.append(ch);
 					state = 12;
+				} else if (ch == '*') {
+					startCol = colNo - 1;
+					text.append(ch);
+					state = 17;
+				} else if (ch == '(') {
+					startCol = colNo - 1;
+					text.append(ch);
+					state = 18;
+				} else if (ch == ')') {
+					startCol = colNo - 1;
+					text.append(ch);
+					state = 19;
 				} else {			// ヘンな文字を読んだ
 					startCol = colNo - 1;
 					text.append(ch);
@@ -144,7 +156,11 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 				} else if (ch == '*') {
 					text.deleteCharAt(0);
 					state = 9;
-				}else {				// /の後に他の文字が来た場合は不正状態に遷移
+				} else if (Character.isDigit(ch)){
+					backChar(ch);
+					tk = new CToken(CToken.TK_DIV, lineNo, startCol, "/");
+					accept = true;
+				} else {
 					state = 2;
 				}
 				break;
@@ -228,6 +244,18 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 				}else {
 					state = 4;
 				}
+				break;
+			case 17:
+				tk = new CToken(CToken.TK_MUL,lineNo,startCol,"*");
+				accept = true;
+				break;
+			case 18:
+				tk = new CToken(CToken.TK_LPAR,lineNo,startCol,"(");
+				accept = true;
+				break;
+			case 19:
+				tk = new CToken(CToken.TK_RPAR,lineNo,startCol,")");
+				accept = true;
 				break;
 			}
 		}
