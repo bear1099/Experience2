@@ -110,7 +110,19 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 					startCol = colNo - 1;
 					text.append(ch);
 					state = 19;
-				} else {			// ヘンな文字を読んだ
+				} else if(ch == '['){
+					startCol = colNo - 1;
+					text.append(ch);
+					state = 20;
+				} else if(ch == ']') {
+					startCol = colNo - 1;
+					text.append(ch);
+					state = 21;
+				}else if((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')){
+					startCol = colNo - 1;
+					text.append(ch);
+					state = 22;
+				} else{			// ヘンな文字を読んだ
 					startCol = colNo - 1;
 					text.append(ch);
 					state = 2;
@@ -255,6 +267,30 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 				break;
 			case 19:
 				tk = new CToken(CToken.TK_RPAR,lineNo,startCol,")");
+				accept = true;
+				break;
+			case 20:
+				tk = new CToken(CToken.TK_LBRA,lineNo,startCol,"[");
+				accept = true;
+				break;
+			case 21:
+				tk = new CToken(CToken.TK_RBRA,lineNo,startCol,"]");
+				accept = true;
+				break;
+			case 22:		//アルファベットを読み込んだ状態
+				ch = readChar();
+				if((ch>='a'&&ch<='z')||(ch>='A'&&ch<='Z')||ch=='_') {
+					text.append(ch);
+					state = 22;
+				}else {
+					backChar(ch);
+					state = 23;
+				}
+				break;
+			case 23:
+				String s = text.toString();
+				Integer i = (Integer) rule.get(s);
+				tk = new CToken((i == null ? CToken.TK_IDENT : i.intValue()), lineNo, startCol, text.toString());
 				accept = true;
 				break;
 			}
