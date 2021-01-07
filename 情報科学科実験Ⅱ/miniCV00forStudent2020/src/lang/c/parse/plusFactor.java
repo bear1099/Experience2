@@ -7,42 +7,46 @@ import lang.c.CParseContext;
 import lang.c.CParseRule;
 import lang.c.CToken;
 import lang.c.CTokenizer;
+import lang.c.CType;
 
-public class Factor extends CParseRule {
-	// factor ::= plusFactor | minusFactor | unsignedFactor
+public class plusFactor extends CParseRule {
+	//plusFactor ::= PLUS unsignedFactor
+	private CToken plus;
 	private CParseRule factor;
-	public Factor(CParseContext pcx) {
+	public plusFactor(CParseContext pcx) {
 	}
 	public static boolean isFirst(CToken tk) {
-		return plusFactor.isFirst(tk) || minusFactor.isFirst(tk) || unsignedFactor.isFirst(tk);
+		return tk.getType() == CToken.TK_PLUS;
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
 		CTokenizer ct = pcx.getTokenizer();
-		CToken tk = ct.getCurrentToken(pcx);
-
+		plus = ct.getCurrentToken(pcx);
+		CToken tk = ct.getNextToken(pcx);
 		if(unsignedFactor.isFirst(tk)) {
 			factor = new unsignedFactor(pcx);
-		}else if(minusFactor.isFirst(tk)) {
-			factor = new minusFactor(pcx);
-		}else if(plusFactor.isFirst(tk)) {
-			factor = new plusFactor(pcx);
+			factor.parse(pcx);
+		}else {
+			pcx.fatalError(tk.toExplainString() + "+の後ろはunsignedFactorです");
 		}
-		factor.parse(pcx);
 	}
 
 	public void semanticCheck(CParseContext pcx) throws FatalErrorException {
 		if (factor != null) {
 			factor.semanticCheck(pcx);
-			setCType(factor.getCType());		// number の型をそのままコピー
-			setConstant(factor.isConstant());	// number は常に定数
+			if(factor.getCType().getType() == CType.T_int) {
+			this.setCType(factor.getCType());		// number の型をそのままコピー
+			this.setConstant(factor.isConstant());	// number は常に定数
+			} else {
+				pcx.fatalError(plus.toExplainString() + "型が違います");
+			}
 		}
 	}
 
 	public void codeGen(CParseContext pcx) throws FatalErrorException {
 		PrintStream o = pcx.getIOContext().getOutStream();
-		o.println(";;; factor starts");
+		o.println(";;; plusfactor starts");
 		if (factor != null) { factor.codeGen(pcx); }
-		o.println(";;; factor completes");
+		o.println(";;; plusfactor completes");
 	}
 }
