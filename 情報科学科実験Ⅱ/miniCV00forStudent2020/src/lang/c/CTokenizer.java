@@ -156,7 +156,7 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 				} else if (ch == '*') {
 					text.deleteCharAt(0);
 					state = 9;
-				} else if (Character.isDigit(ch) || ch == '('){
+				} else if ((ch >= '0' && ch <= '9' )|| ch == '(' || ch == '-'){
 					backChar(ch);
 					tk = new CToken(CToken.TK_DIV, lineNo, startCol, "/");
 					accept = true;
@@ -197,8 +197,9 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 				}
 				break;
 			case 11:
-				tk = new CToken(CToken.TK_ILL,lineNo,startCol,"コメントアウト中にファイルが終了しました");
+				tk = new CToken(CToken.TK_ILL,lineNo,startCol,text.toString());
 				accept = true;
+				System.err.println("[ERROR] コメントアウト中にファイルが終了しました");
 				break;
 			case 12:
 				tk = new CToken(CToken.TK_AMP,lineNo,startCol,"&");
