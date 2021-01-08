@@ -17,7 +17,7 @@ public class Array extends CParseRule{
 		return tk.getType() == CToken.TK_LBRA;
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException{
-		System.out.println("arrayの構文解析中です");
+		//System.out.println("arrayの構文解析中です");
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
 		tk = ct.getNextToken(pcx);

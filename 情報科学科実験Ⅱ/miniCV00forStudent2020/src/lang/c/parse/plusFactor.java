@@ -20,7 +20,7 @@ public class plusFactor extends CParseRule {
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
-		System.out.println("plusFactorの構文解析中です");
+		//System.out.println("plusFactorの構文解析中です");
 		CTokenizer ct = pcx.getTokenizer();
 		plus = ct.getCurrentToken(pcx);
 		CToken tk = ct.getNextToken(pcx);

@@ -19,15 +19,17 @@ public class primary extends CParseRule {
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
-		System.out.println("primaryの構文解析中です");
+		//System.out.println("primaryの構文解析中です");
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
 		if(lang.c.parse.primaryMult.isFirst(tk)) {
 			primaryMult = new primaryMult(pcx);
 			primaryMult.parse(pcx);
-		}else{
+		}else if(lang.c.parse.variable.isFirst(tk)){
 			variable = new variable(pcx);
 			variable.parse(pcx);
+		}else {
+			pcx.fatalError(tk.toExplainString() + "primaryの後はprimaryMultかvariableです");
 		}
 	}
 
@@ -48,7 +50,7 @@ public class primary extends CParseRule {
 	public CParseRule getCPR() {
 		if(primaryMult != null) {
 			return primaryMult;
-		}else if(variable != null) {
+		}else if(variable != null){
 			return variable;
 		}else {
 			return null;

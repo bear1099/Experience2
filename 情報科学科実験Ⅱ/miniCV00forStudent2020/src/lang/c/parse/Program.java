@@ -19,7 +19,7 @@ public class Program extends CParseRule {
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
-		System.out.println("Programの構文解析中です");
+		//System.out.println("Programの構文解析中です");
 		program = new Expression(pcx);
 		program.parse(pcx);
 		CTokenizer ct = pcx.getTokenizer();

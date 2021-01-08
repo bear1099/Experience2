@@ -21,7 +21,7 @@ public class termDiv extends CParseRule {
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
-		System.out.println("termDivの構文解析中です");
+		//System.out.println("termDivの構文解析中です");
 		CTokenizer ct = pcx.getTokenizer();
 		div = ct.getCurrentToken(pcx);
 		CToken tk = ct.getNextToken(pcx);
