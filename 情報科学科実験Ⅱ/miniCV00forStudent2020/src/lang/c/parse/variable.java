@@ -13,6 +13,7 @@ public class variable extends CParseRule {
 	// variable ::= ident [ array ]
 	private CParseRule ident;
 	private CParseRule array;
+	private int type;
 	public variable(CParseContext pcx) {
 	}
 	public static boolean isFirst(CToken tk) {
@@ -20,7 +21,6 @@ public class variable extends CParseRule {
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
-		System.out.println("variableの構文解析中です");
 		array = null;
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
@@ -39,14 +39,19 @@ public class variable extends CParseRule {
 	public void semanticCheck(CParseContext pcx) throws FatalErrorException {
 		if (ident != null) {
 			ident.semanticCheck(pcx);
+			//System.out.println(ident.getCType().getType());
+			type  = ident.getCType().getType();
+			if((type == 3 || type == 4) && array == null) {
+				pcx.fatalError("配列の接頭語を含む識別子ですが、要素数を宣言していません");
+			}else if ((type == 1 || type == 2) && array != null) {
+				pcx.fatalError("配列の接頭語を含まない識別子ですが、要素数が宣言されています");
+			}
 			if (array != null) {
 				array.semanticCheck(pcx);
-				if(ident.getCType().getType() == CType.T_apint) {
+				if(type == CType.T_apint) {
 					setCType(CType.getCType(CType.T_pint));
-				}else if(ident.getCType().getType() == CType.T_aint){
+				}else if(ident.getCType().getType() == CType.T_aint) {
 					setCType(CType.getCType(CType.T_int));
-				}else {
-					pcx.fatalError("不適切な型です");
 				}
 			}else {
 				setCType(ident.getCType());
@@ -55,8 +60,8 @@ public class variable extends CParseRule {
 		setConstant(ident.isConstant());
 	}
 
-	public CParseRule getCPR() {
-		return array;
+	public CType getIdent() {
+		return ident.getCType();
 	}
 
 	public void codeGen(CParseContext pcx) throws FatalErrorException {

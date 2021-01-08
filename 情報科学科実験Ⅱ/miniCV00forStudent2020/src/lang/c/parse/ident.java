@@ -19,7 +19,7 @@ public class ident extends CParseRule {
 		return tk.getType() == CToken.TK_IDENT;
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
-		System.out.println("identの構文解析中です");
+		//System.out.println("identの構文解析中です");
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
 		ident = tk;
@@ -29,9 +29,27 @@ public class ident extends CParseRule {
 	}
 
 	public void semanticCheck(CParseContext pcx) throws FatalErrorException {
+		//System.out.println("identの意味解析中です");
 		if(ident != null) {
+			//識別子が何から始まっているのかを判断する
+			String[] arr = ident.getText().split("_");
+			System.out.println("識別子の接頭語: [" + arr[0] + "]");
+			if(arr[0].equals("i")) {
 			this.setCType(CType.getCType(CType.T_int));
 			this.setConstant(false);
+			}else if(arr[0].equals("ip")) {
+				this.setCType(CType.getCType(CType.T_pint));
+				this.setConstant(false);;
+			}else if(arr[0].contentEquals("ia")) {
+				this.setCType(CType.getCType(CType.T_aint));
+				this.setConstant(false);
+			}else if(arr[0].contentEquals("ipa")) {
+				this.setCType(CType.getCType(CType.T_apint));
+				this.setConstant(false);
+			}else if(arr[0].contentEquals("c")) {
+				this.setCType(CType.getCType(CType.T_int));
+				this.setConstant(true);
+			}
 		}
 	}
 

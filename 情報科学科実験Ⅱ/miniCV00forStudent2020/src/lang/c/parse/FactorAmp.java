@@ -13,7 +13,9 @@ public class FactorAmp extends CParseRule {
 	// factorAmp ::= Amp ( number | primary )
 	private CParseRule number;
 	private CParseRule primary;
+	private CParseRule temp;
 	private CToken amp;
+	private int type;
 	public FactorAmp(CParseContext pcx) {
 	}
 	public static boolean isFirst(CToken tk) {
@@ -21,7 +23,7 @@ public class FactorAmp extends CParseRule {
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
-		System.out.println("FactorAMPの構文解析中です");
+		//System.out.println("FactorAMPの構文解析中です");
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
 		amp = tk;
@@ -45,11 +47,16 @@ public class FactorAmp extends CParseRule {
 		}
 		if (primary != null) {
 			primary.semanticCheck(pcx);
-			if(((primary)(primary)).getCPR() instanceof primaryMult) {
-				pcx.error("factorAmp の子節点にprimary がつながっているとき、その下にはprimaryMult クラスのオブジェクトが来てはいけません");
+			temp = ((primary)primary).getCPR();
+			//System.out.println(temp);
+			if(temp instanceof primaryMult) {
+				pcx.fatalError("&の後ろに*を置くことはできません");
+			}else if(temp instanceof variable) {
+				type = ((variable) temp).getIdent().getType();
+				if(type == 2 || type == 4) {
+					pcx.fatalError("&の後ろにポイント型のIdentを置くことはできません");
+				}
 			}
-			setCType(CType.getCType(CType.T_apint));
-			setConstant(primary.isConstant());
 		}
 	}
 

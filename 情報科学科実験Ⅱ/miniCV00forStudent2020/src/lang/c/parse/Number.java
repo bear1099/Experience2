@@ -18,7 +18,7 @@ public class Number extends CParseRule {
 		return tk.getType() == CToken.TK_NUM;
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
-		System.out.println("numberの構文解析中です");
+		//System.out.println("numberの構文解析中です");
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
 		num = tk;

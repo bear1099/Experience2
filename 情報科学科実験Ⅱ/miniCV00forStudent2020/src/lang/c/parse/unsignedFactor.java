@@ -18,7 +18,7 @@ public class unsignedFactor extends CParseRule {
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
-		System.out.println("UnsignedFactorの構文解析中です");
+		//System.out.println("UnsignedFactorの構文解析中です");
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
 		if(FactorAmp.isFirst(tk)) {
