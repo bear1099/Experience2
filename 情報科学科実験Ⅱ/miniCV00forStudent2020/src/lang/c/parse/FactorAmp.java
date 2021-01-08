@@ -10,8 +10,10 @@ import lang.c.CTokenizer;
 import lang.c.CType;
 
 public class FactorAmp extends CParseRule {
-	// factor ::= factorAmp
-	private CParseRule factorAmp;
+	// factorAmp ::= Amp ( number | primary )
+	private CParseRule number;
+	private CParseRule primary;
+	private CToken amp;
 	public FactorAmp(CParseContext pcx) {
 	}
 	public static boolean isFirst(CToken tk) {
@@ -19,27 +21,42 @@ public class FactorAmp extends CParseRule {
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
-		CParseRule num = null;
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
-
+		amp = tk;
 		tk = ct.getNextToken(pcx);
-		if(Number.isFirst(tk)) {
-			num = new Number(pcx);
-			num.parse(pcx);
+		if(Number.isFirst(tk)){
+			number = new Number(pcx);
+			number.parse(pcx);
+		}else if(lang.c.parse.primary.isFirst(tk)) {
+			primary = new primary(pcx);
+			primary.parse(pcx);
+		}else {
+			pcx.error(tk.toExplainString() + " '&'の次にnumberまたはprimaryがありません");
 		}
-		factorAmp = num;
 	}
 
 	public void semanticCheck(CParseContext pcx) throws FatalErrorException {
-		this.setCType(CType.getCType(CType.T_pint));
-		this.setConstant(true);
+		if (number != null) {
+			number.semanticCheck(pcx);
+			setCType(CType.getCType(CType.T_pint));
+			setConstant(number.isConstant());	// number は常に定数
+		}
+		if (primary != null) {
+			primary.semanticCheck(pcx);
+			if(((primary)(primary)).getCPR() instanceof primaryMult) {
+				pcx.error("factorAmp の子節点にprimary がつながっているとき、その下にはprimaryMult クラスのオブジェクトが来てはいけません");
+			}
+			setCType(CType.getCType(CType.T_apint));
+			setConstant(primary.isConstant());
+		}
 	}
 
 	public void codeGen(CParseContext pcx) throws FatalErrorException {
 		PrintStream o = pcx.getIOContext().getOutStream();
 		o.println(";;; factorAmp starts");
-		if (factorAmp != null) { factorAmp.codeGen(pcx); }
+		if (number != null) { number.codeGen(pcx); }
+		if( primary != null) { primary.codeGen(pcx); }
 		o.println(";;; factorAmp completes");
 	}
 }

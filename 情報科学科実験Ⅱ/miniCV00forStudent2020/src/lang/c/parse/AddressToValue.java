@@ -14,10 +14,10 @@ public class AddressToValue extends CParseRule {
 	public AddressToValue(CParseContext pcx) {
 	}
 	public static boolean isFirst(CToken tk) {
-		return Primary.isFirst(tk);
+		return lang.c.parse.primary.isFirst(tk);
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
-		primary = new Primary(pcx);
+		primary = new primary(pcx);
 		primary.parse(pcx);
 	}
 

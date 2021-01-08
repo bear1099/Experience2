@@ -148,7 +148,7 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 			case 4:					//数が終わった状態
 				tk = new CToken(CToken.TK_NUM,lineNo,startCol,text.toString());
 				if(Integer.decode(text.toString()) > 65535) {
-					tk = new CToken(CToken.TK_ILL,lineNo,startCol,text.toString() + " 16bitで表現できません");
+					tk = new CToken(CToken.TK_ILL,lineNo,startCol,text.toString());
 				}
 				accept = true;
 				break;
@@ -168,7 +168,7 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 				} else if (ch == '*') {
 					text.deleteCharAt(0);
 					state = 9;
-				} else if (Character.isDigit(ch) || ch == '('){
+				} else if (Character.isDigit(ch) || ch == '(' || ch == '-'){
 					backChar(ch);
 					tk = new CToken(CToken.TK_DIV, lineNo, startCol, "/");
 					accept = true;
@@ -209,8 +209,9 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 				}
 				break;
 			case 11:
-				tk = new CToken(CToken.TK_ILL,lineNo,startCol,"コメントアウト中にファイルが終了しました");
+				tk = new CToken(CToken.TK_ILL,lineNo,startCol,text.toString());
 				accept = true;
+				System.err.println("[ERROR] コメントアウト中にファイルが終了しました");
 				break;
 			case 12:
 				tk = new CToken(CToken.TK_AMP,lineNo,startCol,"&");
