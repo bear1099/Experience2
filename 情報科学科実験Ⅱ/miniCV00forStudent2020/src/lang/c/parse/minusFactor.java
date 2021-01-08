@@ -38,7 +38,6 @@ public class minusFactor extends CParseRule {
 			setCType(factor.getCType());		// number の型をそのままコピー
 			setConstant(factor.isConstant());	// number は常に定数
 			}else {
-				System.out.println(factor.getCType());
 				pcx.fatalError(minus.toExplainString() + "アドレス値の前に-は付けられません");
 		}
 	}
