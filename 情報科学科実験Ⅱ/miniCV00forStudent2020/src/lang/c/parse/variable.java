@@ -20,6 +20,7 @@ public class variable extends CParseRule {
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
+		System.out.println("variableの構文解析中です");
 		array = null;
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);

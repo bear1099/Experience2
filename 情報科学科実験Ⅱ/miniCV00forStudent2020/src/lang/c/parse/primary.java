@@ -15,10 +15,11 @@ public class primary extends CParseRule {
 	public primary(CParseContext pcx) {
 	}
 	public static boolean isFirst(CToken tk) {
-		return primary.isFirst(tk) || lang.c.parse.variable.isFirst(tk);
+		return lang.c.parse.primaryMult.isFirst(tk) || lang.c.parse.variable.isFirst(tk);
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
+		System.out.println("primaryの構文解析中です");
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
 		if(lang.c.parse.primaryMult.isFirst(tk)) {

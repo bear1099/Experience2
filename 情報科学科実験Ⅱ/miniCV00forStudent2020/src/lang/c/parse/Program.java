@@ -1,8 +1,12 @@
 package lang.c.parse;
 
 import java.io.PrintStream;
-import lang.*;
-import lang.c.*;
+
+import lang.FatalErrorException;
+import lang.c.CParseContext;
+import lang.c.CParseRule;
+import lang.c.CToken;
+import lang.c.CTokenizer;
 
 public class Program extends CParseRule {
 	// program ::= expression EOF
@@ -15,6 +19,7 @@ public class Program extends CParseRule {
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
+		System.out.println("Programの構文解析中です");
 		program = new Expression(pcx);
 		program.parse(pcx);
 		CTokenizer ct = pcx.getTokenizer();

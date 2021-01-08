@@ -18,6 +18,7 @@ public class Term extends CParseRule {
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
+		System.out.println("termの構文解析中です");
 		CParseRule list = null, factor = null;
 		factor = new Factor(pcx);
 		factor.parse(pcx);

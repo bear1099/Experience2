@@ -21,6 +21,7 @@ public class Expression extends CParseRule {
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
+		System.out.println("Expressionの構文解析中です");
 		CParseRule term = null, list = null;
 		term = new Term(pcx);
 		term.parse(pcx);
@@ -82,6 +83,7 @@ class ExpressionAdd extends CParseRule {
 		this.left = left;
 	}
 	public static boolean isFirst(CToken tk) {
+		//System.out.println("ExpressionAddの構文解析中です");
 		return tk.getType() == CToken.TK_PLUS;
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
@@ -141,6 +143,7 @@ class ExpressionSub extends CParseRule {
 		this.left = left;
 	}
 	public static boolean isFirst(CToken tk) {
+		//System.out.println("ExpressionSUBの構文解析中です");
 		return tk.getType() == CToken.TK_MINUS;
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {

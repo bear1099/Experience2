@@ -14,10 +14,11 @@ public class unsignedFactor extends CParseRule {
 	public unsignedFactor(CParseContext pcx) {
 	}
 	public static boolean isFirst(CToken tk) {
-		return Number.isFirst(tk) || FactorAmp.isFirst(tk) || tk.getType() == CToken.TK_LPAR;
+		return Number.isFirst(tk) || FactorAmp.isFirst(tk) || tk.getType() == CToken.TK_LPAR || AddressToValue.isFirst(tk);
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
+		System.out.println("UnsignedFactorの構文解析中です");
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
 		if(FactorAmp.isFirst(tk)) {

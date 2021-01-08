@@ -19,10 +19,13 @@ public class ident extends CParseRule {
 		return tk.getType() == CToken.TK_IDENT;
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
+		System.out.println("identの構文解析中です");
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
 		ident = tk;
+		//System.out.println("ident : " + ident.toExplainString());
 		tk = ct.getNextToken(pcx);
+		//System.out.println("NextToken : " + tk.toExplainString());
 	}
 
 	public void semanticCheck(CParseContext pcx) throws FatalErrorException {

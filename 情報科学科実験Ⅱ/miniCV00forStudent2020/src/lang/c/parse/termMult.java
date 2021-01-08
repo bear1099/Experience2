@@ -21,6 +21,7 @@ public class termMult extends CParseRule {
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
+		System.out.println("termMULの構文解析中です");
 		CTokenizer ct = pcx.getTokenizer();
 		mult = ct.getCurrentToken(pcx);
 		CToken tk = ct.getNextToken(pcx);

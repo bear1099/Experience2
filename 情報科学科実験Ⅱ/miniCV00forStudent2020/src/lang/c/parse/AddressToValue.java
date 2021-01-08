@@ -17,6 +17,7 @@ public class AddressToValue extends CParseRule {
 		return lang.c.parse.primary.isFirst(tk);
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
+		System.out.println("AddressToValueの構文解析中です");
 		primary = new primary(pcx);
 		primary.parse(pcx);
 	}
