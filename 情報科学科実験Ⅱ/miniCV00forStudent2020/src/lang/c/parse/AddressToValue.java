@@ -34,8 +34,8 @@ public class AddressToValue extends CParseRule {
 		PrintStream o = pcx.getIOContext().getOutStream();
 		o.println(";;; addressToValue starts");
 		if (primary != null) { primary.codeGen(pcx); }
-		o.println("\tMOV\t-(R6), R0\t; AddressToValue: スタックから番地を取り出す");
-		o.println("\tMOV\t(R0), (R6)+\t; AddressToValue: 番地から値を取り出しスタックへ");
+		o.println("\tMOV\t-(R6), R0\t; AddressToValue: スタックからアドレスを取り出す");
+		o.println("\tMOV\t(R0), (R6)+\t; AddressToValue: アドレスから値を取り出しスタックへ");
 		o.println(";;; addressToValue completes");
 	}
 }
