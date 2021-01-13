@@ -57,13 +57,13 @@ public class ident extends CParseRule {
 		PrintStream o = pcx.getIOContext().getOutStream();
 		o.println(";;; ident starts");
 		if (ident != null) {
-			String[] arr = ident.getText().split("_");
+		//	String[] arr = ident.getText().split("_");
 			o.println("\tMOV\t#" + ident.getText() + ", (R6)+\t; Ident: 変数アドレスを積む<"
 					+ ident.toExplainString() + ">");
-			if(arr[0].contentEquals("ip") || arr[0].contentEquals("ipa")) {
-				o.println("\tMOV\t-(R6), R0\t;\tIdent: スタックから変数アドレスを取り出す");
-				o.println("\tMOV\t(R0), (R6)+\t;\tIdent: 変数アドレスから値(ポインタなのでアドレス値)を取り出しスタックへ");
-			}
+		//	if(arr[0].contentEquals("ip") || arr[0].contentEquals("ipa")) {
+		//		o.println("\tMOV\t-(R6), R0\t;\tIdent: スタックから変数アドレスを取り出す");
+		//		o.println("\tMOV\t(R0), (R6)+\t;\tIdent: 変数アドレスから値(ポインタなのでアドレス値)を取り出しスタックへ");
+		//	}
 		}
 		o.println(";;; ident completes");
 	}
