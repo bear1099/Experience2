@@ -67,4 +67,17 @@ public class FactorAmp extends CParseRule {
 		if( primary != null) { primary.codeGen(pcx); }
 		o.println(";;; factorAmp completes");
 	}
+
+	public CParseRule getNum() {
+		if(number != null) {return number;}
+		else {return null;}
+	}
+
+	public  boolean ampNumisExit() {
+		if(getNum() != null) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 }
