@@ -49,6 +49,9 @@ public class ident extends CParseRule {
 			}else if(arr[0].contentEquals("c")) {
 				this.setCType(CType.getCType(CType.T_int));
 				this.setConstant(true);
+			}else {
+				this.setCType(CType.getCType(CType.T_int));
+				this.setConstant(false);
 			}
 		}
 	}
