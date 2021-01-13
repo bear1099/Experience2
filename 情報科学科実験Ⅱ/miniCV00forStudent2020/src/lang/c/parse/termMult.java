@@ -37,10 +37,12 @@ public class termMult extends CParseRule {
 	public void semanticCheck(CParseContext pcx) throws FatalErrorException {
 		//乗算の型計算
 		final int s[][] = {
-				//	T_err			T_int		  T_pint
-				{ CType.T_err,	CType.T_err,	CType.T_err},	//	T_err
-				{ CType.T_err,	CType.T_int,	CType.T_err},	//	T_int
-				{ CType.T_err,	CType.T_err,	CType.T_err},	//	T_pint
+                //		T_err				T_int				T_pint			T_intArray		T_pintArray
+                {	CType.T_err,	CType.T_err,	CType.T_err,	CType.T_err,	CType.T_err},	// T_err
+                {	CType.T_err,	CType.T_int,	CType.T_err,	CType.T_err,	CType.T_err},	// T_int
+                {	CType.T_err,	CType.T_err,	CType.T_err,	CType.T_err,	CType.T_err},	// T_pint
+                {	CType.T_err,	CType.T_err,	CType.T_err,	CType.T_err,	CType.T_err},	//T_intArray
+                {	CType.T_err,	CType.T_err,	CType.T_err,	CType.T_err,	CType.T_err},	//T_pintArray
 		};
 		if(left != null && right != null) {
 			left.semanticCheck(pcx);
