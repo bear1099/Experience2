@@ -125,11 +125,23 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 				} else if(ch == '='){
 					startCol = colNo - 1;
 					text.append(ch);
-					state = 24;
+					state = 26;
 				}else if(ch == ';'){
 					startCol = colNo - 1;
 					text.append(ch);
 					state = 25;
+				}else if(ch == '<') {
+					startCol = colNo - 1;
+					text.append(ch);
+					state = 28;
+				}else if(ch == '>') {
+					startCol = colNo - 1;
+					text.append(ch);
+					state = 31;
+				}else if(ch == '!') {
+					startCol = colNo - 1;
+					text.append(ch);
+					state = 34;
 				}else{
 					startCol = colNo - 1;
 					text.append(ch);
@@ -308,6 +320,70 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 				break;
 			case 25:
 				tk = new CToken(CToken.TK_SEMI,lineNo,startCol,";");
+				accept = true;
+				break;
+			case 26:
+				ch = readChar();
+				if(ch == '=') {
+					text.append(ch);
+					state = 27;
+				}else {
+					backChar(ch);
+					state = 24;
+				}
+				break;
+			case 27:
+				tk = new CToken(CToken.TK_EQ,lineNo,startCol,"==");
+				accept = true;
+				break;
+			case 28:
+				ch = readChar();
+				if(ch == '=') {
+					text.append(ch);
+					state = 29;
+				}else {
+					backChar(ch);
+					state = 30;
+				}
+				break;
+			case 29:
+				tk = new CToken(CToken.TK_LE,lineNo,startCol,"<=");
+				accept = true;
+				break;
+			case 30:
+				tk = new CToken(CToken.TK_LT,lineNo,startCol,"<");
+				accept = true;
+				break;
+			case 31:
+				ch = readChar();
+				if(ch == '=') {
+					text.append(ch);
+					state = 32;
+				}else {
+					backChar(ch);
+					state = 33;
+				}
+				break;
+			case 32:
+				tk = new CToken(CToken.TK_GE,lineNo,startCol,">=");
+				accept = true;
+				break;
+			case 33:
+				tk = new CToken(CToken.TK_GT,lineNo,startCol,">");
+				accept = true;
+				break;
+			case 34:
+				ch = readChar();
+				if(ch == '=') {
+					text.append(ch);
+					state = 35;
+				}else {
+					backChar(ch);
+					state = 2;
+				}
+				break;
+			case 35:
+				tk = new CToken(CToken.TK_NE,lineNo,startCol,"!=");
 				accept = true;
 				break;
 			}
