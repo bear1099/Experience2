@@ -23,6 +23,13 @@ public class CToken extends SimpleToken {
 	public static final int TK_NE			= 19;				// !=
 	public static final int TK_TRUE			= 20;				// true
 	public static final int TK_FALSE			= 21;				// false
+	public static final int TK_LCUR			= 22;				// {
+	public static final int TK_RCUR			= 23;				// }
+	public static final int TK_INPUT			= 24;				// input
+	public static final int TK_OUTPUT		= 25;				// output
+	public static final int TK_IF			= 26;				// if
+	public static final int TK_ELSE			= 27;				// else
+	public static final int TK_WHILE			= 28;				// while
 
 
 

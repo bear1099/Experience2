@@ -142,6 +142,14 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 					startCol = colNo - 1;
 					text.append(ch);
 					state = 34;
+				}else if(ch == '{') {
+					startCol = colNo - 1;
+					text.append(ch);
+					state = 36;
+				}else if(ch == '}') {
+					startCol = colNo - 1;
+					text.append(ch);
+					state = 37;
 				}else{
 					startCol = colNo - 1;
 					text.append(ch);
@@ -384,6 +392,14 @@ public class CTokenizer extends Tokenizer<CToken, CParseContext> {
 				break;
 			case 35:
 				tk = new CToken(CToken.TK_NE,lineNo,startCol,"!=");
+				accept = true;
+				break;
+			case 36:
+				tk = new CToken(CToken.TK_LCUR,lineNo,startCol,"{");
+				accept = true;
+				break;
+			case 37:
+				tk = new CToken(CToken.TK_RCUR,lineNo,startCol,"}");
 				accept = true;
 				break;
 			}
