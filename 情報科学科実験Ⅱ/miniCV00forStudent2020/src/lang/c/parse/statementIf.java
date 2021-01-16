@@ -26,22 +26,29 @@ public class statementIf extends CParseRule {
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
-		//System.out.println("Programの構文解析中です");
+		System.out.println("statementIFの構文解析中です");
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
 		tk = ct.getNextToken(pcx);
 		list = new ArrayList<CParseRule>();
 		if(tk.getType() == CToken.TK_LPAR) {
+			//System.out.println("(を確認しました");
 			tk = ct.getNextToken(pcx);
+			//System.out.println("次のトークンを解析します");
 			if(Condition.isFirst(tk)) {
+				//System.out.println("Conditionを確認しました");
 				condition = new Condition(pcx);
 				condition.parse(pcx);
 				tk = ct.getCurrentToken(pcx);
+				//System.out.println("次のトークンを解析します");
 				if(tk.getType() == CToken.TK_RPAR) {
+					//System.out.println(")を確認しました");
 					tk = ct.getNextToken(pcx);
 					if(tk.getType() == CToken.TK_LCUR) {
+						//System.out.println("{を確認しました");
 						tk = ct.getNextToken(pcx);
 						while(lang.c.parse.statement.isFirst(tk)) {
+							//System.out.println("Statementを確認しました");
 							statement = new statement(pcx);
 							statement.parse(pcx);
 							list.add(statement);
@@ -49,8 +56,10 @@ public class statementIf extends CParseRule {
 						}
 						tk = ct.getCurrentToken(pcx);
 						if(tk.getType() == CToken.TK_RCUR) {
-							ct.getNextToken(pcx);
+							//System.out.println("}を確認しました");
+							tk = ct.getNextToken(pcx);
 							if(statementElse.isFirst(tk)) {
+								//System.out.println("StatementElseの構文解析を始めます");
 								statementelse = new statementElse(pcx);
 								statementelse.parse(pcx);
 							}
