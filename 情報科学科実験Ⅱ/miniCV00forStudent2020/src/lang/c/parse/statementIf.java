@@ -26,7 +26,7 @@ public class statementIf extends CParseRule {
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
-		System.out.println("statementIFの構文解析中です");
+		//System.out.println("statementIFの構文解析中です");
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
 		tk = ct.getNextToken(pcx);

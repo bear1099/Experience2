@@ -1,9 +1,9 @@
-// �R�[�h�����e�X�g
-//	if, while, input, output�̕��@�������̂ƈقȂ�ꍇ�́A
-//	�����̕��@�ɍ����悤�ɒ����Ďg�����ƁB
+// コード生成テスト
+//	if, while, input, outputの文法が自分のと異なる場合は、
+//	自分の文法に合うように直して使うこと。
 //
-//	���x����u���ʒu�A���򖽗߂̌��̃W�����v�惉�x�����������Ă��邩�m�F����
-
+//	ラベルを置く位置、分岐命令の後ろのジャンプ先ラベル名が合っているか確認する
+/*
 if (false) {
    i_a=3;
 }
@@ -13,7 +13,7 @@ if (true) {
 } else {
    i_a=2;
 }
-
+*/
 while (true) {
    input i_a;
    while (false) {
@@ -21,4 +21,3 @@ while (true) {
    }
    i_a=4;
 }
-

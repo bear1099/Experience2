@@ -21,7 +21,7 @@ public class statementAssign extends CParseRule {
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
-		System.out.println("StatementAssignの構文解析中です");
+		//System.out.println("StatementAssignの構文解析中です");
 		primary = new primary(pcx);
 		primary.parse(pcx);
 		CTokenizer ct = pcx.getTokenizer();

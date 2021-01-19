@@ -23,7 +23,7 @@ public class Condition extends CParseRule {
 	}
 	public void parse(CParseContext pcx) throws FatalErrorException {
 		// ここにやってくるときは、必ずisFirst()が満たされている
-		System.out.println("Conditionの構文解析中です");
+		//System.out.println("Conditionの構文解析中です");
 		CTokenizer ct = pcx.getTokenizer();
 		CToken tk = ct.getCurrentToken(pcx);
 		if(Expression.isFirst(tk)) {
