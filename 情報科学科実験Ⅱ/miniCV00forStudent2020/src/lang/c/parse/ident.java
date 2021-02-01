@@ -33,7 +33,7 @@ public class ident extends CParseRule {
 		if(ident != null) {
 			//識別子が何から始まっているのかを判断する
 			String[] arr = ident.getText().split("_");
-			System.out.println("識別子の接頭語: [" + arr[0] + "]");
+			//System.out.println("識別子の接頭語: [" + arr[0] + "]");
 			if(arr[0].equals("i")) {
 			this.setCType(CType.getCType(CType.T_int));
 			this.setConstant(false);

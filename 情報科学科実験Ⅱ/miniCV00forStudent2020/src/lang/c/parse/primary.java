@@ -36,13 +36,13 @@ public class primary extends CParseRule {
 	public void semanticCheck(CParseContext pcx) throws FatalErrorException {
 		if(primaryMult != null) {
 			primaryMult.semanticCheck(pcx);
-			setCType(primaryMult.getCType());
-			setConstant(primaryMult.isConstant());
+			this.setCType(primaryMult.getCType());
+			this.setConstant(primaryMult.isConstant());
 		}
 		if (variable != null) {
 			variable.semanticCheck(pcx);
-			setCType(variable.getCType());
-			setConstant(variable.isConstant());
+			this.setCType(variable.getCType());
+			this.setConstant(variable.isConstant());
 		}
 
 	}

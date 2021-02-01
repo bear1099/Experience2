@@ -44,7 +44,11 @@ public class statementInput extends CParseRule {
 	}
 
 	public void semanticCheck(CParseContext pcx) throws FatalErrorException {
-		if (primary != null) {primary.semanticCheck(pcx);}
+		if (primary != null) {primary.semanticCheck(pcx);
+		if(primary.isConstant() != false) {
+			pcx.fatalError("定数にinputすることはできません");
+			}
+		}
 		if(factorAMP != null) {factorAMP.semanticCheck(pcx);}
 	}
 
